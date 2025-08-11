@@ -6,7 +6,7 @@ package ca.sheridancollege.project;
 
 /**
  *
- * @author Mudaser
+ * @author Mudaser / Valmir
  */
 import java.util.ArrayList;
 import java.util.Collections;

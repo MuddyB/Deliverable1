@@ -54,7 +54,7 @@ public class UnoPlayer extends Player {
         }
     }
 
-    // Computer AI turn
+    // Computer turn
     public boolean playComputerTurn(UnoCard topCard, UnoDeck deck) {
         for (int i = 0; i < hand.size(); i++) {
             UnoCard card = hand.get(i);
