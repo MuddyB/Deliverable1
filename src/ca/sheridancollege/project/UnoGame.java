@@ -1,45 +1,65 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ca.sheridancollege.project;
-
-/**
- *
- * @author Mudaser
- */
 
 public class UnoGame extends Game {
     private UnoDeck deck;
-    private UnoPlayer player;
+    private UnoPlayer player1;
+    private UnoPlayer player2;
     private UnoCard topCard;
 
     public UnoGame(String name) {
         super(name);
         deck = new UnoDeck(40);
-        
-        //create a player and give them 7 cards to start the game
-        player = new UnoPlayer("Player 1");
-        for (int i = 0; i < 7; i++) player.drawCard(deck);
+        deck.shuffle(); // shuffle for randomness
+
+        player1 = new UnoPlayer("Player 1");
+        player2 = new UnoPlayer("Computer");
+
+        // Deal 7 cards each
+        for (int i = 0; i < 7; i++) {
+            player1.drawCard(deck);
+            player2.drawCard(deck);
+        }
+
+        // Start with top card
         topCard = deck.draw();
     }
 
-    //loop the game cycle
     @Override
     public void play() {
-        //continue playing while players still have cards
-        while (player.getHandSize() > 0) {
-            //player turn
-            boolean played = player.playTurn(topCard, deck);
-            //if card is played, update the card ontop of pile
-            if (played) topCard = player.getLastPlayedCard();
+        UnoPlayer currentPlayer = player1; // Player 1 starts
+        boolean gameOver = false;
+
+        while (!gameOver) {
+            System.out.println("\n--- " + currentPlayer.getName() + "'s turn ---");
+
+            boolean played;
+            if (currentPlayer == player1) {
+                played = currentPlayer.playTurn(topCard, deck);
+            } else {
+                played = currentPlayer.playComputerTurn(topCard, deck);
+            }
+
+            if (played) {
+                topCard = currentPlayer.getLastPlayedCard();
+                System.out.println("Top card is now: " + topCard);
+            }
+
+            if (currentPlayer.getHandSize() == 0) {
+                declareWinner(currentPlayer);
+                gameOver = true;
+            } else {
+                // Switch players
+                currentPlayer = (currentPlayer == player1) ? player2 : player1;
+            }
         }
-        //Whoever has no cards left wins
-        declareWinner();
     }
-    // winning message
+
     @Override
     public void declareWinner() {
-        System.out.println("You win!");
+        // Not used here, we use the overloaded one
+    }
+
+    public void declareWinner(UnoPlayer winner) {
+        System.out.println("\n*** " + winner.getName() + " WINS! ***");
     }
 }
